@@ -145,12 +145,12 @@
           score++;
           document.getElementById("score").textContent = score;
 
-          // Veren animatie op positie van de eend
           const duckRect = duck.getBoundingClientRect();
           const gameRect = document.querySelector(".game-screen").getBoundingClientRect();
           const x = duckRect.left - gameRect.left + duckRect.width / 2;
           const y = duckRect.top - gameRect.top + duckRect.height / 2;
           spawnFeathers(x, y);
+          duckHit();
 
           resetStone(stone);
         }
@@ -190,7 +190,20 @@
           }, 900);
       });
     }
-    
+
+    function duckHit() {
+      const duck = document.getElementById("duck");
+      
+      // Stop animatie en verberg eend
+      duck.style.animation = "none";
+      duck.style.opacity = "0";
+
+      // Na 1 seconde opnieuw laten verschijnen
+      setTimeout(() => {
+          duck.style.opacity = "1";
+          duck.style.animation = "fly-across 4s linear infinite";
+      }, 1000);
+    }
 
     function resetStone(stone) {
         stoneFlying = false;
