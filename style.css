@@ -239,11 +239,11 @@ body {
 
 .camera-wrapper {
   margin-top: 20px;
-  border-radius: 16px;
+  border-radius: 100px;
   overflow: hidden;
   border: 4px solid #111;
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
 }
 
 .camera-wrapper-game {

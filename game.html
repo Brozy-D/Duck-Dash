@@ -170,11 +170,17 @@
           }
 
           if (timeLeft <= 0) {
-              clearInterval(timerInterval);
-              canShoot = false;
+            clearInterval(timerInterval);
+            canShoot = false;
+            setTimeout(() => {
+                window.location.href = "end.html?score=" + score;
+            }, 1000);
           }
       }, 1000);
     }
+
+    const savedHighscore = localStorage.getItem("highscore") || 0;
+    document.getElementById("highscore-label").textContent = "high score: " + savedHighscore; 
 
     window.addEventListener("load", init);
 </script>
