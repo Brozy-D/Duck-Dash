@@ -142,11 +142,55 @@
             stoneRect.bottom > duckRect.top;
 
         if (hit) {
-            score++;
-            document.getElementById("score").textContent = score;
-            resetStone(stone);
+          score++;
+          document.getElementById("score").textContent = score;
+
+          // Veren animatie op positie van de eend
+          const duckRect = duck.getBoundingClientRect();
+          const gameRect = document.querySelector(".game-screen").getBoundingClientRect();
+          const x = duckRect.left - gameRect.left + duckRect.width / 2;
+          const y = duckRect.top - gameRect.top + duckRect.height / 2;
+          spawnFeathers(x, y);
+
+          resetStone(stone);
         }
     }
+
+    function spawnFeathers(x, y) {
+      const gameScreen = document.querySelector(".game-screen");
+      const feathers = ["🪶", "🪶", "🪶", "🪶", "🪶"];
+
+      feathers.forEach((feather, i) => {
+          const el = document.createElement("div");
+          el.textContent = feather;
+          el.style.position = "absolute";
+          el.style.fontSize = "24px";
+          el.style.left = x + "px";
+          el.style.top = y + "px";
+          el.style.zIndex = "999";
+          el.style.pointerEvents = "none";
+          el.style.transition = "all 0.8s ease";
+          gameScreen.appendChild(el);
+
+          // Random richting voor elke veer
+          const angle = (i / feathers.length) * 360;
+          const distance = 80 + Math.random() * 60;
+          const rad = (angle * Math.PI) / 180;
+          const tx = Math.cos(rad) * distance;
+          const ty = Math.sin(rad) * distance;
+
+          setTimeout(() => {
+              el.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg)`;
+              el.style.opacity = "0";
+          }, 50);
+
+          // Verwijder na animatie
+          setTimeout(() => {
+              el.remove();
+          }, 900);
+      });
+    }
+    
 
     function resetStone(stone) {
         stoneFlying = false;
