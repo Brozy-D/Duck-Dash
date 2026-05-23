@@ -56,6 +56,7 @@
     let model, webcam, ctx, maxPredictions;
     let canShoot = true;
     let score = 0;
+    let stoneFlying = false;
 
     async function init() {
         const modelURL = URL + "model.json";
@@ -98,7 +99,7 @@
 
         // Check for "Shoot" pose
         for (let i = 0; i < maxPredictions; i++) {
-            if (prediction[i].className === "Shoot" && prediction[i].probability > 0.9) {
+            if (prediction[i].className === "Shoot" && prediction[i].probability > 0.97) {
                 if (canShoot) {
                     canShoot = false;
                     shootStone();
@@ -142,6 +143,17 @@
         document.getElementById("score").textContent = score;
         resetStone(stone);
     }
+}
+
+function resetStone(stone) {
+    stoneFlying = false;
+    stone.style.transition = "none";
+    stone.style.bottom = "25px";
+    stone.style.left = "calc(50% - 20px)";
+
+    setTimeout(() => {
+        canShoot = true;
+    }, 1500);
 }
 
     window.addEventListener("load", init);
