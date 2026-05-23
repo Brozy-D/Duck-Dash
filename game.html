@@ -126,7 +126,23 @@
     }, 900);
 }
 
-    //
+    function checkHit(stone) {
+    const stoneRect = stone.getBoundingClientRect();
+    const duck = document.getElementById("duck");
+    const duckRect = duck.getBoundingClientRect();
+
+    const hit =
+        stoneRect.left < duckRect.right &&
+        stoneRect.right > duckRect.left &&
+        stoneRect.top < duckRect.bottom &&
+        stoneRect.bottom > duckRect.top;
+
+    if (hit) {
+        score++;
+        document.getElementById("score").textContent = score;
+        resetStone(stone);
+    }
+}
 
     window.addEventListener("load", init);
 </script>
