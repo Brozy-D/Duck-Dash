@@ -20,13 +20,14 @@
         <span class="hs-label2" id="highscore-label">high score: 0</span>
       </div>
 
-      <div>
-        <a href="index.html">🏠</a>
-      </div>
-
       <div class="score-display">
         <p class="score-number" id="score">0</p>
         <p class="score-label">score</p>
+      </div>
+
+      <div class="timer-display">
+        <p class="timer-number" id="timer">30</p>
+        <p class="timer-label">seconden</p>
       </div>
 
       <img class="duck-flying" id="duck" src="images/Duck.svg" alt="duck" />
@@ -50,13 +51,15 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
 <script>
-    // 🔗 PASTE YOUR TEACHABLE MACHINE LINK HERE
     const URL = "https://teachablemachine.withgoogle.com/models/KKyE5O-sP/";
 
     let model, webcam, ctx, maxPredictions;
     let canShoot = true;
     let score = 0;
     let stoneFlying = false;
+
+    let timeLeft = 30;
+    let timerInterval = null;
 
     async function init() {
         const modelURL = URL + "model.json";
@@ -76,6 +79,8 @@
         canvas.width = size;
         canvas.height = size;
         ctx = canvas.getContext("2d");
+
+        startTimer();
     }
 
     async function loop() {
@@ -88,7 +93,6 @@
         const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
         const prediction = await model.predict(posenetOutput);
 
-        // Draw camera
         if (webcam.canvas) {
             ctx.drawImage(webcam.canvas, 0, 0);
             if (pose) {
@@ -97,9 +101,8 @@
             }
         }
 
-        // Check for "Shoot" pose
         for (let i = 0; i < maxPredictions; i++) {
-            if (prediction[i].className === "Shoot" && prediction[i].probability > 0.97) {
+            if (prediction[i].className === "Shoot" && prediction[i].probability > 0.90) {
                 if (canShoot) {
                     canShoot = false;
                     shootStone();
@@ -109,52 +112,69 @@
     }
 
     function shootStone() {
-    if (stoneFlying) return;
-    stoneFlying = true;
-    canShoot = false;
+        if (stoneFlying) return;
+        stoneFlying = true;
+        canShoot = false;
 
-    const stone = document.getElementById("stone");
-    stone.style.transition = "bottom 0.8s linear";
-    stone.style.bottom = "900px";
+        const stone = document.getElementById("stone");
+        stone.style.transition = "bottom 0.8s linear";
+        stone.style.bottom = "900px";
 
-    let checkInterval = setInterval(() => {
-        checkHit(stone);
-    }, 50);
+        let checkInterval = setInterval(() => {
+            checkHit(stone);
+        }, 50);
 
-    setTimeout(() => {
-        clearInterval(checkInterval);
-        resetStone(stone);
-    }, 900);
-}
+        setTimeout(() => {
+            clearInterval(checkInterval);
+            resetStone(stone);
+        }, 900);
+    }
 
     function checkHit(stone) {
-    const stoneRect = stone.getBoundingClientRect();
-    const duck = document.getElementById("duck");
-    const duckRect = duck.getBoundingClientRect();
+        const stoneRect = stone.getBoundingClientRect();
+        const duck = document.getElementById("duck");
+        const duckRect = duck.getBoundingClientRect();
 
-    const hit =
-        stoneRect.left < duckRect.right &&
-        stoneRect.right > duckRect.left &&
-        stoneRect.top < duckRect.bottom &&
-        stoneRect.bottom > duckRect.top;
+        const hit =
+            stoneRect.left < duckRect.right &&
+            stoneRect.right > duckRect.left &&
+            stoneRect.top < duckRect.bottom &&
+            stoneRect.bottom > duckRect.top;
 
-    if (hit) {
-        score++;
-        document.getElementById("score").textContent = score;
-        resetStone(stone);
+        if (hit) {
+            score++;
+            document.getElementById("score").textContent = score;
+            resetStone(stone);
+        }
     }
-}
 
-function resetStone(stone) {
-    stoneFlying = false;
-    stone.style.transition = "none";
-    stone.style.bottom = "25px";
-    stone.style.left = "calc(50% - 20px)";
+    function resetStone(stone) {
+        stoneFlying = false;
+        stone.style.transition = "none";
+        stone.style.bottom = "25px";
+        stone.style.left = "calc(50% - 20px)";
 
-    setTimeout(() => {
-        canShoot = true;
-    }, 1500);
-}
+        setTimeout(() => {
+            canShoot = true;
+        }, 1500);
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+          timeLeft--;
+          const timerEl = document.getElementById("timer");
+          timerEl.textContent = timeLeft;
+
+          if (timeLeft <= 5) {
+              timerEl.style.color = "red";
+          }
+
+          if (timeLeft <= 0) {
+              clearInterval(timerInterval);
+              canShoot = false;
+          }
+      }, 1000);
+    }
 
     window.addEventListener("load", init);
 </script>
