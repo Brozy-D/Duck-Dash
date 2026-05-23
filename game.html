@@ -11,36 +11,34 @@
 
   <div class="game-screen">
 
-    
     <img class="bg-image" src="images/background.svg" alt="game background" />
 
     <div class="content">
 
-      
-        <div class="highscore-wrapper2">
-            <img class="hs-bg2" src="images/highscore.svg" alt="" />
-            <span class="hs-label2">high score: 32</span>
-        </div>
+      <div class="highscore-wrapper2">
+        <img class="hs-bg2" src="images/highscore.svg" alt="" />
+        <span class="hs-label2" id="highscore-label">high score: 0</span>
+      </div>
 
-        <div>
-            <a href="index.html">🏠</a>
-        </div>
+      <div>
+        <a href="index.html">🏠</a>
+      </div>
 
-      
       <div class="score-display">
-        <p class="score-number">0</p>
+        <p class="score-number" id="score">0</p>
         <p class="score-label">score</p>
       </div>
 
-      
-      <img class="duck-flying" src="images/Duck.svg" alt="duck" />
+      <img class="duck-flying" id="duck" src="images/Duck.svg" alt="duck" />
 
-      
       <img class="catapult" src="images/catapult.svg" alt="catapult" />
-      <img class="stone" src="images/stone.svg" alt="stone" />
+      <img class="stone" id="stone" src="images/stone.svg" alt="stone" />
 
+      <!-- CAMERA -->
+      <div class="camera-wrapper-game">
+        <canvas id="canvas"></canvas>
+      </div>
 
-      
       <div class="credits">
         <p>Made by: Brozy Denayer</p>
         <p>Duck Dash v1.0</p>
@@ -48,6 +46,90 @@
 
     </div>
   </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+<script>
+    // 🔗 PASTE YOUR TEACHABLE MACHINE LINK HERE
+    const URL = "https://teachablemachine.withgoogle.com/models/KKyE5O-sP/";
+
+    let model, webcam, ctx, maxPredictions;
+    let canShoot = true;
+    let score = 0;
+
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmPose.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        const size = 200;
+        const flip = true;
+        webcam = new tmPose.Webcam(size, size, flip);
+        await webcam.setup();
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        const canvas = document.getElementById("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        ctx = canvas.getContext("2d");
+    }
+
+    async function loop() {
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+        const prediction = await model.predict(posenetOutput);
+
+        // Draw camera
+        if (webcam.canvas) {
+            ctx.drawImage(webcam.canvas, 0, 0);
+            if (pose) {
+                tmPose.drawKeypoints(pose.keypoints, 0.5, ctx);
+                tmPose.drawSkeleton(pose.keypoints, 0.5, ctx);
+            }
+        }
+
+        // Check for "Shoot" pose
+        for (let i = 0; i < maxPredictions; i++) {
+            if (prediction[i].className === "Shoot" && prediction[i].probability > 0.9) {
+                if (canShoot) {
+                    canShoot = false;
+                    shootStone();
+                }
+            }
+        }
+    }
+
+    function shootStone() {
+    if (stoneFlying) return;
+    stoneFlying = true;
+    canShoot = false;
+
+    const stone = document.getElementById("stone");
+    stone.style.transition = "bottom 0.8s linear";
+    stone.style.bottom = "900px";
+
+    let checkInterval = setInterval(() => {
+        checkHit(stone);
+    }, 50);
+
+    setTimeout(() => {
+        clearInterval(checkInterval);
+        resetStone(stone);
+    }, 900);
+}
+
+    //
+
+    window.addEventListener("load", init);
+</script>
 
 </body>
 </html>

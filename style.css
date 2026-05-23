@@ -246,6 +246,18 @@ body {
   height: 250px;
 }
 
+.camera-wrapper-game {
+  position: absolute;
+  bottom: 40px;
+  right: 18px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid #111;
+  width: 200px;
+  height: 200px;
+  z-index: 10;
+}
+
 #canvas {
   display: block;
   width: 250px;
