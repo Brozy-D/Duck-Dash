@@ -1,0 +1,251 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: whitesmoke;
+  font-family: 'Nunito', sans-serif;
+}
+
+.game-screen {
+  width: 768px;
+  height: 1024px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leaderboard-icon {
+  position: absolute;
+  top: 18px; left: 18px;
+  width: 72px;
+}
+.leaderboard-icon img {
+  width: 100%; height: auto; display: block;
+}
+
+.title-wrapper {
+  margin-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title-img {
+  height: 120px; width: auto;
+}
+
+.title-duck-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.title-duck-single {
+  width: 72px;
+  height: auto;
+}
+
+.instructions {
+  margin-top: 28px;
+  text-align: center;
+  padding: 0 60px;
+}
+.instructions p {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111;
+  line-height: 1.75;
+}
+.instructions .welcome {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.highscore-wrapper  {
+  margin-top: 30px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.highscore-wrapper img.hs-bg {
+  height: 52px; width: auto;
+}
+.highscore-wrapper .hs-label {
+  position: absolute;
+  font-size: 18px;
+  font-weight: 900;
+  color: #111;
+  white-space: nowrap;
+}
+
+.start-text {
+  margin-top: 36px;
+  text-align: center;
+}
+.start-text p {
+  font-size: 19px;
+  font-weight: 900;
+  color: #111;
+}
+
+.credits {
+  position: absolute;
+  bottom: 14px; right: 18px;
+  text-align: right;
+}
+.credits p {
+  font-size: 11px;
+  font-weight: 700;
+  color: black;
+  line-height: 1.5;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: whitesmoke;
+  font-family: 'Nunito', sans-serif;
+}
+
+
+.game-screen {
+  width: 768px;
+  height: 1024px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+
+.bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%; height: 100%;
+}
+
+
+.highscore-wrapper2 {
+  position: absolute;
+  top: 18px; left: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.highscore-wrapper2 img.hs-bg2 {
+  height: 52px; width: auto;
+}
+.highscore-wrapper2 .hs-label2 {
+  position: absolute;
+  font-size: 18px;
+  font-weight: 900;
+  color: #111;
+  white-space: nowrap;
+}
+
+
+.score-display {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.score-number {
+  font-size: 72px;
+  font-weight: 900;
+  color: #111;
+  line-height: 1;
+}
+.score-label {
+  font-size: 17px;
+  font-weight: 800;
+  color: #111;
+  margin-top: 4px;
+}
+
+
+.duck-flying {
+  position: absolute;
+  top: 310px;
+  left: -120px;
+  width: 80px;
+  height: auto;
+  animation: fly-across 4s linear infinite;
+}
+
+@keyframes fly-across {
+  0%   { left: -130px; }
+  100% { left: 800px;  }
+}
+
+
+.catapult {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: auto;
+}
+
+.stone {
+  position: absolute;
+  bottom: 25px;
+  left: calc(50% - 20px);
+  width: 55px;
+  height: auto;
+}
+
+
+.credits {
+  position: absolute;
+  bottom: 14px; right: 18px;
+  text-align: right;
+}
+.credits p {
+  font-size: 11px;
+  font-weight: 700;
+  color: black;
+  line-height: 1.5;
+}
